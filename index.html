@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Personality Quiz for Kids</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(255, 105, 180, 0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px dashed #ff6b8b;
+        }
+        
+        h1 {
+            color: #ff5e62;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+        }
+        
+        h2 {
+            color: #ff8a5c;
+            font-size: 1.8rem;
+            margin: 20px 0 15px;
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+        
+        .quiz-container {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .quiz-container.active {
+            display: block;
+        }
+        
+        .start-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .result-container {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s;
+        }
+        
+        .question-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ff6b8b;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .option {
+            background-color: #fff8f0;
+            border: 3px solid #ffb19e;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option:hover {
+            background-color: #ffecec;
+            transform: translateY(-2px);
+        }
+        
+        .option.selected {
+            background-color: #ffd1dc;
+            border-color: #ff6b8b;
+            color: #ff3366;
+            font-weight: bold;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        
+        button {
+            background: linear-gradient(to right, #ff8a5c, #ff5e62);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(255, 94, 98, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(255, 94, 98, 0.4);
+        }
+        
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .prev-btn {
+            background: linear-gradient(to right, #ff9a8b, #ff6b8b);
+        }
+        
+        .option-image {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+            border-radius: 10px;
+            background-color: #ffeef2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+        }
+        
+        .progress-container {
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: linear-gradient(to right, #ff9a8b, #ff6b8b);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+            color: #ff5e62;
+        }
+        
+        .result-personality {
+            font-size: 2.5rem;
+            color: #ff5e62;
+            margin: 20px 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+        }
+        
+        .personality-description {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .personality-animal {
+            font-size: 1.4rem;
+            margin: 10px 0;
+            color: #ff8a5c;
+        }
+        
+        .result-image {
+            font-size: 80px;
+            margin: 20px 0;
+        }
+        
+        .restart-btn {
+            margin-top: 20px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .option {
+                padding: 10px;
+                font-size: 1rem;
+            }
+            
+            .option-image {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>What's Your Special Personality?</h1>
+        </header>
+        
+        <div class="start-container" id="startContainer">
+            <div class="intro">
+                <p>Hi friend! Everyone is special in their own way. This fun quiz will help you discover what makes YOU special!</p>
+                <p>Answer some easy questions and find out what kind of awesome person you are! 🌟</p>
+            </div>
+            <button id="startBtn">Start The Fun Quiz!</button>
+        </div>
+        
+        <div class="quiz-container" id="quizContainer">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text" id="progressText">Question 1 of 8</div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question" id="question"></div>
+                <div class="options" id="options"></div>
+            </div>
+            
+            <div class="navigation">
+                <button class="prev-btn" id="prevBtn" disabled>Back</button>
+                <button class="next-btn" id="nextBtn" disabled>Next</button>
+            </div>
+        </div>
+        
+        <div class="result-container" id="resultContainer">
+            <h2>Your Special Personality Is:</h2>
+            <div class="result-personality" id="resultPersonality"></div>
+            <div class="result-image" id="resultImage"></div>
+            <div class="personality-animal" id="personalityAnimal"></div>
+            <div class="personality-description" id="personalityDescription"></div>
+            <button class="restart-btn" id="restartBtn">Play Again!</button>
+        </div>
+    </div>
+    
+    <script>
+        // Quiz questions
+        const questions = [
+            {
+                question: "When you meet new friends, you usually:",
+                options: [
+                    { text: "Talk a lot and tell them all about yourself", value: "E" },
+                    { text: "Watch and listen first before saying much", value: "I" }
+                ],
+                images: ["🗣️", "👂"]
+            },
+            {
+                question: "When playing with toys, you like to:",
+                options: [
+                    { text: "Make up new games with no rules", value: "N" },
+                    { text: "Build things carefully or follow the instructions", value: "S" }
+                ],
+                images: ["🌈", "🧩"]
+            },
+            {
+                question: "When making a decision about what to eat, you:",
+                options: [
+                    { text: "Think about how it will make everyone feel", value: "F" },
+                    { text: "Think about what makes the most sense", value: "T" }
+                ],
+                images: ["❤️", "🧠"]
+            },
+            {
+                question: "When it's time for bed, you prefer:",
+                options: [
+                    { text: "Having a schedule and knowing what time bedtime is", value: "J" },
+                    { text: "Going to bed when you feel tired", value: "P" }
+                ],
+                images: ["🕒", "😴"]
+            },
+            {
+                question: "When you're at a birthday party, you like to:",
+                options: [
+                    { text: "Play with lots of different friends", value: "E" },
+                    { text: "Play with just one or two close friends", value: "I" }
+                ],
+                images: ["🎉", "👫"]
+            },
+            {
+                question: "When someone tells you a story, you like to hear about:",
+                options: [
+                    { text: "Amazing adventures and magical things", value: "N" },
+                    { text: "Real things that actually happened", value: "S" }
+                ],
+                images: ["🦄", "📷"]
+            },
+            {
+                question: "If a friend is sad, you usually:",
+                options: [
+                    { text: "Give them a hug and try to cheer them up", value: "F" },
+                    { text: "Ask them what happened and how to fix it", value: "T" }
+                ],
+                images: ["🤗", "🛠️"]
+            },
+            {
+                question: "When it's time to clean up your toys, you:",
+                options: [
+                    { text: "Put everything away in its special place", value: "J" },
+                    { text: "Play with just a few more things before cleaning", value: "P" }
+                ],
+                images: ["🧹", "🎮"]
+            }
+        ];
+
+        // Personality types data
+        const personalityTypes = {
+            "ISTJ": {
+                name: "The Careful Helper",
+                animal: "Like a trusty guard dog 🐕",
+                description: "You're super responsible and like when things are organized. You remember important details and always follow the rules. You're the friend everyone can count on to remember promises and get things done right!"
+            },
+            "ISFJ": {
+                name: "The Kind Protector",
+                animal: "Like a gentle koala bear 🐨",
+                description: "You're very caring and notice when others need help. You remember what makes your friends happy and love to take care of people. You work hard at school and always try to be helpful and kind to everyone."
+            },
+            "INFJ": {
+                name: "The Thoughtful Guide",
+                animal: "Like a wise owl 🦉",
+                description: "You understand how people feel without them telling you. You have big ideas about making the world better and care deeply about others. You like having a few close friends and helping solve their problems."
+            },
+            "INTJ": {
+                name: "The Creative Thinker",
+                animal: "Like a strategic fox 🦊",
+                description: "You have lots of clever ideas and like figuring out how things work. You make good plans and stick to them. You don't mind being different from others and enjoy solving tricky problems that make others give up."
+            },
+            "ISTP": {
+                name: "The Curious Explorer",
+                animal: "Like an independent cat 🐱",
+                description: "You're good at building things and solving puzzles. You like to understand how toys work and might even take things apart to see inside. You're brave in new situations and good at using tools and fixing things."
+            },
+            "ISFP": {
+                name: "The Gentle Artist",
+                animal: "Like a playful dolphin 🐬",
+                description: "You notice beautiful things others might miss. You're kind and don't like to argue. You express yourself through art, music, or dance and have a strong sense of right and wrong. You're a good friend who really listens."
+            },
+            "INFP": {
+                name: "The Dreamy Helper",
+                animal: "Like a magical unicorn 🦄",
+                description: "You have a big imagination and care deeply about doing what's right. You understand feelings very well and like to help others. You might enjoy writing stories, reading books, or just daydreaming about magical worlds."
+            },
+            "INTP": {
+                name: "The Curious Questioner",
+                animal: "Like an investigative raccoon 🦝",
+                description: "You ask 'why' about everything and love learning new facts. You think outside the box and come up with unique solutions. You might enjoy puzzles, building with blocks, or figuring out how games work."
+            },
+            "ESTP": {
+                name: "The Bold Adventurer",
+                animal: "Like an energetic monkey 🐵",
+                description: "You're brave and love trying new and exciting things. You're quick-thinking during surprises and very observant. You love being active and might be good at sports. You live in the moment and bring fun wherever you go!"
+            },
+            "ESFP": {
+                name: "The Playful Performer",
+                animal: "Like a social butterfly 🦋",
+                description: "You bring sunshine wherever you go and love making others smile. You might enjoy dancing, singing, or being the center of attention. You're generous, notice when others need cheering up, and love surprises and parties!"
+            },
+            "ENFP": {
+                name: "The Enthusiastic Inventor",
+                animal: "Like a spirited hummingbird 🐦",
+                description: "You're full of energy and creative ideas. You see exciting possibilities everywhere and love starting new projects. You make friends easily, care about others' feelings, and get excited about almost everything!"
+            },
+            "ENTP": {
+                name: "The Clever Challenger",
+                animal: "Like a mischievous otter 🦦",
+                description: "You love coming up with new ideas and finding different ways to solve problems. You ask lots of interesting questions and might enjoy friendly debates. You're quick-thinking, funny, and never get bored for long!"
+            },
+            "ESTJ": {
+                name: "The Little Leader",
+                animal: "Like a hardworking beaver 🦫",
+                description: "You're great at organizing games and making sure everyone follows the rules. You like when things make sense and work properly. You're honest, dependable, and good at getting things done. You might be the one who takes charge in group projects!"
+            },
+            "ESFJ": {
+                name: "The Caring Friend",
+                animal: "Like a loyal elephant 🐘",
+                description: "You notice when others need help and jump right in to make things better. You remember everyone's birthdays and like making sure everyone feels included. You're very helpful to teachers and parents and love bringing people together."
+            },
+            "ENFJ": {
+                name: "The Inspiring Guide",
+                animal: "Like a leading lion 🦁",
+                description: "You're good at getting everyone excited about your ideas. You understand what others need and help them feel better when they're sad. You're a natural leader who wants to make sure everyone is included and happy."
+            },
+            "ENTJ": {
+                name: "The Young Commander",
+                animal: "Like a decisive eagle 🦅",
+                description: "You're a natural leader with big plans. You like being in charge and are good at telling others what needs to be done. You work hard to reach your goals and might be the one organizing your friends to build the biggest fort ever!"
+            }
+        };
+
+        // Quiz variables
+        let currentQuestion = 0;
+        let answers = [];
+        
+        // DOM Elements
+        const startContainer = document.getElementById('startContainer');
+        const quizContainer = document.getElementById('quizContainer');
+        const resultContainer = document.getElementById('resultContainer');
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const resultPersonality = document.getElementById('resultPersonality');
+        const resultImage = document.getElementById('resultImage');
+        const personalityAnimal = document.getElementById('personalityAnimal');
+        const personalityDescription = document.getElementById('personalityDescription');
+        
+        // Event Listeners
+        document.getElementById('startBtn').addEventListener('click', startQuiz);
+        prevBtn.addEventListener('click', goToPrevQuestion);
+        nextBtn.addEventListener('click', goToNextQuestion);
+        document.getElementById('restartBtn').addEventListener('click', restartQuiz);
+        
+        // Functions
+        function startQuiz() {
+            startContainer.style.display = 'none';
+            quizContainer.style.display = 'block';
+            loadQuestion();
+        }
+        
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            questionElement.textContent = question.question;
+            
+            optionsElement.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.classList.add('option');
+                if (answers[currentQuestion] === option.value) {
+                    optionDiv.classList.add('selected');
+                }
+                
+                const imageDiv = document.createElement('div');
+                imageDiv.classList.add('option-image');
+                imageDiv.textContent = question.images[index];
+                
+                const textDiv = document.createElement('div');
+                textDiv.textContent = option.text;
+                
+                optionDiv.appendChild(imageDiv);
+                optionDiv.appendChild(textDiv);
+                
+                optionDiv.addEventListener('click', () => {
+                    selectOption(option.value);
+                });
+                
+                optionsElement.appendChild(optionDiv);
+            });
+            
+            // Update progress
+            updateProgress();
+            
+            // Enable/disable navigation buttons
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = !answers[currentQuestion];
+            
+            if (currentQuestion === questions.length - 1 && answers[currentQuestion]) {
+                nextBtn.textContent = 'See Results';
+            } else {
+                nextBtn.textContent = 'Next';
+            }
+        }
+        
+        function selectOption(value) {
+            answers[currentQuestion] = value;
+            
+            // Update visual selection
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            const selectedOption = Array.from(options).find(option => 
+                option.querySelector('div:last-child').textContent === 
+                questions[currentQuestion].options.find(opt => opt.value === value).text
+            );
+            
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+            }
+            
+            // Enable next button
+            nextBtn.disabled = false;
+        }
+        
+        function goToPrevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+        
+        function goToNextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+        
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+        }
+        
+        function showResults() {
+            quizContainer.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            // Calculate personality type
+            const counts = {
+                E: 0, I: 0,
+                S: 0, N: 0,
+                T: 0, F: 0,
+                J: 0, P: 0
+            };
+            
+            // Count answers for each preference
+            answers.forEach((answer, index) => {
+                counts[answer]++;
+            });
+            
+            // Determine personality type
+            const personality = [
+                counts.E > counts.I ? 'E' : 'I',
+                counts.S > counts.N ? 'S' : 'N',
+                counts.T > counts.F ? 'T' : 'F',
+                counts.J > counts.P ? 'J' : 'P'
+            ].join('');
+            
+            // Set personality type details
+            const personalityData = personalityTypes[personality];
+            resultPersonality.textContent = personality + ": " + personalityData.name;
+            personalityAnimal.textContent = personalityData.animal;
+            personalityDescription.textContent = personalityData.description;
+            
+            // Set emoji based on personality
+            const emojiMap = {
+                'ISTJ': '🐕', 'ISFJ': '🐨', 'INFJ': '🦉', 'INTJ': '🦊',
+                'ISTP': '🐱', 'ISFP': '🐬', 'INFP': '🦄', 'INTP': '🦝',
+                'ESTP': '🐵', 'ESFP': '🦋', 'ENFP': '🐦', 'ENTP': '🦦',
+                'ESTJ': '🦫', 'ESFJ': '🐘', 'ENFJ': '🦁', 'ENTJ': '🦅'
+            };
+            
+            resultImage.textContent = emojiMap[personality];
+        }
+        
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = [];
+            resultContainer.style.display = 'none';
+            startContainer.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
